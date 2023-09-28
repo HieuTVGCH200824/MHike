@@ -1,44 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <!--this is a popup with a close button on the right corner-->
-    <androidx.cardview.widget.CardView
-        android:id="@+id/popupCardView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.49">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <!--this is the close button-->
-            <ImageButton
-                android:id="@+id/closePopup"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:background="@android:color/transparent"
-                android:contentDescription="close popup"
-                android:minWidth="48dp"
-                android:minHeight="48dp"
-                android:src="@android:drawable/ic_menu_close_clear_cancel"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="10dp"
+    >
             <TextView
                 android:id="@+id/popupTitle"
                 android:layout_width="wrap_content"
@@ -48,14 +16,10 @@
                 android:layout_marginEnd="16dp"
                 android:text="Add a new hike"
                 android:textColor="#000000"
-                android:textSize="24sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
+                android:textSize="24sp" />
             <EditText
                 android:id="@+id/popupHikeName"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
@@ -65,14 +29,10 @@
                 android:inputType="textPersonName"
                 android:textColor="#000000"
                 android:textColorHint="#000000"
-                android:textSize="24sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/popupTitle" />
-
+                android:textSize="24sp" />
             <EditText
                 android:id="@+id/popupHikeLocation"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
@@ -82,10 +42,87 @@
                 android:inputType="textPersonName"
                 android:textColor="#000000"
                 android:textColorHint="#000000"
-                android:textSize="24sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/popupHikeName" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.cardview.widget.CardView>
-</androidx.constraintlayout.widget.ConstraintLayout>
+                android:textSize="24sp" />
+<!--            date picker for hike date-->
+            <EditText
+                android:id="@+id/popupHikeDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:ems="10"
+                android:hint="Hike date"
+                android:inputType="textPersonName"
+                android:textColor="#000000"
+                android:textColorHint="#000000"
+                android:textSize="24sp" />
+            <CheckBox
+                android:id="@+id/popupParkingAvailable"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="Parking available?"
+                android:textColor="#000000"
+                android:textSize="24sp" />
+            <EditText
+                android:id="@+id/popupHikeLength"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:ems="10"
+                android:hint="Hike length"
+                android:inputType="textPersonName"
+                android:textColor="#000000"
+                android:textColorHint="#000000"
+                android:textSize="24sp" />
+<!--            level of difficulty-->
+            <RadioGroup
+                android:id="@+id/popupHikeDifficulty"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:orientation="horizontal"
+                android:textColor="#000000"
+                android:textSize="24sp">
+
+                <RadioButton
+                    android:id="@+id/popupHikeDifficultyEasy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Easy" />
+                <RadioButton
+                    android:id="@+id/popupHikeDifficultyMedium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Medium" />
+
+                <RadioButton
+                    android:id="@+id/popupHikeDifficultyHard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Hard" />
+            </RadioGroup>
+            <EditText
+                android:id="@+id/popupHikeDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:ems="10"
+                android:hint="Hike description"
+                android:inputType="textPersonName"
+                android:textColor="#000000"
+                android:textColorHint="#000000"
+                android:textSize="24sp" />
+</LinearLayout>
