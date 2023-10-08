@@ -5,15 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
-
-
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay"
         tools:ignore="MissingConstraints">
-
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
@@ -21,16 +18,18 @@
             android:background="?attr/colorPrimary"
 
             app:popupTheme="@style/AppTheme.PopupOverlay" >
-
-            <Button
+            <ImageButton
                 android:id="@+id/deleteAllHikes"
+                android:minHeight="48dp"
+                android:minWidth="48dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
-                android:drawableRight="@android:drawable/ic_menu_delete"
+                android:background="@null"
+                android:contentDescription="delete all hikes"
+                android:src="@android:drawable/ic_menu_delete"
                 />
         </androidx.appcompat.widget.Toolbar>
-
     </com.google.android.material.appbar.AppBarLayout>
 
     <include
@@ -43,27 +42,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/hikeList"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
-        android:clickable="true"
-        android:contentDescription="list of hikes"
-        android:longClickable="true"
-        android:scrollbars="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/addNewHike"
-        app:layout_constraintTop_toTopOf="parent" />
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/addNewHike"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:clickable="true"
-        android:contentDescription="add new hike"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@android:drawable/ic_input_add" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

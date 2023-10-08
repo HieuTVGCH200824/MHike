@@ -5,8 +5,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.RadioGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -59,10 +58,21 @@ public class HikeAdapter extends RecyclerView.Adapter<HikeAdapter.HikeViewHolder
         holder.name.setText(hike.getName());
         holder.location.setText(hike.getLocation());
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
+        ImageButton editButton = holder.itemView.findViewById(R.id.editButton);
+
+
+        editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mainActivity.addAndEditHike(true,hike, positions);
+            }
+        });
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //go to detail hike's detail view
+
             }
         });
 
