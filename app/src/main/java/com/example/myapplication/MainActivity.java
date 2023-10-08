@@ -6,18 +6,18 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
-import android.media.Image;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
+import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.PopupWindow;
-import android.view.ViewGroup;
-import android.view.Gravity;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,14 +25,13 @@ import android.widget.Toast;
 import com.example.myapplication.adapter.HikeAdapter;
 import com.example.myapplication.db.DatabaseHelper;
 import com.example.myapplication.db.entity.Hike;
-import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
     private FloatingActionButton addNewHike;
-    private PopupWindow popupWindow;
     private DatabaseHelper db;
     private HikeAdapter hikeAdapter;
     private ArrayList<Hike> hikeArrayList = new ArrayList<>();
@@ -52,7 +51,37 @@ public class MainActivity extends AppCompatActivity {
         hikeAdapter = new HikeAdapter(this, hikeArrayList, this);
         hikeList.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         hikeList.setItemAnimator(new DefaultItemAnimator());
-        hikeList.setAdapter(new HikeAdapter(this, db.getAllHikes(), this));
+        hikeList.setAdapter(hikeAdapter);
+
+
+        //delete all hikes
+        Button deleteAllHikes = findViewById(R.id.deleteAllHikes);
+        deleteAllHikes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //display confirmation dialog
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setTitle("Delete All Hikes");
+                builder.setMessage("Are you sure you want to delete all hikes?");
+                builder.setCancelable(true);
+                //delete on confirm
+                builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int i) {
+                        deleteAllHikes(view);
+                        dialog.dismiss();
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int i) {
+                        dialog.dismiss();
+                    }
+                });
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+        });
 
 
         addNewHike = findViewById(R.id.addNewHike);
@@ -65,6 +94,42 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void deleteAllHikes(View view) {
+        db.deleteAllHikes();
+        hikeArrayList.clear();
+        hikeAdapter.notifyDataSetChanged();
+    }
+
+    private void showDatePickerDialog(Button hikeDateButton) {
+        final Calendar c = Calendar.getInstance();
+
+        // on below line we are getting
+        // our day, month and year.
+        int year = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH);
+        int day = c.get(Calendar.DAY_OF_MONTH);
+
+
+        // on below line we are creating a variable for date picker dialog.
+        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                // on below line we are passing context.
+                MainActivity.this,
+                new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year,
+                                          int monthOfYear, int dayOfMonth) {
+                        hikeDateButton.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+
+                    }
+                },
+                // on below line we are passing year,
+                // month and day for selected date in our date picker.
+                year, month, day);
+        // at last we are calling show to
+        // display our date picker dialog.
+        datePickerDialog.show();
+    }
+
     public void addAndEditHike (final boolean isUpdated, final Hike hike, final int position) {
         LayoutInflater layoutInflater = LayoutInflater.from(getApplicationContext());
         View popupView = layoutInflater.inflate(R.layout.popup_layout, null);
@@ -75,31 +140,35 @@ public class MainActivity extends AppCompatActivity {
         TextView popupTitle = popupView.findViewById(R.id.popupTitle);
         final TextView hikeName = popupView.findViewById(R.id.popupHikeName);
         final TextView hikeLocation = popupView.findViewById(R.id.popupHikeLocation);
-        final TextView hikeDate = popupView.findViewById(R.id.popupHikeDate);
-        final TextView hikeParking = popupView.findViewById(R.id.popupParkingAvailable);
+        final Button hikeDateButton = popupView.findViewById(R.id.popupHikeDateButton);
+        final CheckBox hikeParking = popupView.findViewById(R.id.popupParkingAvailable);
         final TextView hikeLength = popupView.findViewById(R.id.popupHikeLength);
         final RadioGroup hikeDifficulty = popupView.findViewById(R.id.popupHikeDifficulty);
         final TextView hikeDescription = popupView.findViewById(R.id.popupHikeDescription);
+
+        hikeDateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDatePickerDialog(hikeDateButton);
+            }
+        });
 
         popupTitle.setText(isUpdated? "Edit Hike" : "Add New Hike");
 
         if (isUpdated && hike != null) {
             hikeName.setText(hike.getName());
             hikeLocation.setText(hike.getLocation());
-            hikeDate.setText(hike.getDate());
-            hikeParking.setText(hike.getParking());
+            hikeDateButton.setText(hike.getDate());
+            hikeParking.setChecked(hike.getParking());
             hikeLength.setText(hike.getLength());
             hikeDescription.setText(hike.getDescription());
 
-            String difficulty = hike.getDifficulty();
-            if ("Easy".equals(difficulty)) {
-                hikeDifficulty.check(R.id.popupHikeDifficultyEasy);
-            } else if ("Medium".equals(difficulty)) {
-                hikeDifficulty.check(R.id.popupHikeDifficultyMedium);
-            } else if ("Hard".equals(difficulty)) {
-                hikeDifficulty.check(R.id.popupHikeDifficultyHard);
+            int difficulty = hike.getDifficulty();
+            Log.d("difficulty", String.valueOf(difficulty));
+            if(difficulty != 1){
+                RadioButton radioButton = popupView.findViewById(difficulty);
+                radioButton.setChecked(true);
             }
-
         }
 
         alertDialogBuilder.setCancelable(false)
@@ -112,10 +181,27 @@ public class MainActivity extends AppCompatActivity {
                             dialogInterface.dismiss();
                         }
 
+                        if(hikeName.getText().toString().isEmpty()){
+                            Toast.makeText(MainActivity.this, "Hike's name invalid", Toast.LENGTH_SHORT).show();
+                            return;
+                        }else if(hikeLocation.getText().toString().isEmpty()){
+                            Toast.makeText(MainActivity.this, "Hike's location invalid", Toast.LENGTH_SHORT).show();
+                            return;
+                        }else if(hikeDateButton.getText().toString().isEmpty() || hikeDateButton.getText().toString().equals("Select Date")){
+                            Toast.makeText(MainActivity.this, "Hike's date invalid", Toast.LENGTH_SHORT).show();
+                            return;
+                        }else if(hikeLength.getText().toString().isEmpty()) {
+                            Toast.makeText(MainActivity.this, "Hike's length invalid", Toast.LENGTH_SHORT).show();
+                            return;
+                        } else if (hikeDifficulty.getCheckedRadioButtonId() == -1) {
+                            Toast.makeText(MainActivity.this, "Hike's difficulty invalid", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
                         if(isUpdated && hike != null) {
-                            updateHike(hikeName.getText().toString(), hikeLocation.getText().toString(), hikeDate.getText().toString(), hikeParking.getText().toString(), hikeLength.getText().toString(), hikeDifficulty.toString(), hikeDescription.getText().toString(), position);
+                            updateHike(hikeName.getText().toString(), hikeLocation.getText().toString(), hikeDateButton.getText().toString(), hikeParking.isChecked(), hikeLength.getText().toString(), hikeDifficulty.getCheckedRadioButtonId(), hikeDescription.getText().toString(), position);
                         } else {
-                            createHike(hikeName.getText().toString(), hikeLocation.getText().toString(), hikeDate.getText().toString(), hikeParking.getText().toString(), hikeLength.getText().toString(), hikeDifficulty.toString(), hikeDescription.getText().toString());
+                            createHike(hikeName.getText().toString(), hikeLocation.getText().toString(), hikeDateButton.getText().toString(), hikeParking.isChecked(), hikeLength.getText().toString(), hikeDifficulty.getCheckedRadioButtonId(), hikeDescription.getText().toString());
                         }
                     }
                 }).setNegativeButton(isUpdated ? "Delete" : "Cancel", new DialogInterface.OnClickListener() {
@@ -132,7 +218,7 @@ public class MainActivity extends AppCompatActivity {
             alertDialog.show();
     }
 
-    private void createHike (String name, String location, String date, String parking, String length, String difficulty, String description) {
+    private void createHike (String name, String location, String date, Boolean parking, String length, int difficulty, String description) {
         long id = db.insertHike(name, location, date, parking, length, difficulty, description);
         Hike hike = db.getHike(id);
         if (hike != null) {
@@ -141,8 +227,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void updateHike (String name, String location, String date, String parking, String length, String difficulty, String description, int position) {
-        Hike hike = db.getAllHikes().get(position);
+    private void updateHike (String name, String location, String date, Boolean parking, String length, int difficulty, String description, int position) {
+        Hike hike = hikeArrayList.get(position);
         hike.setName(name);
         hike.setLocation(location);
         hike.setDate(date);
@@ -152,7 +238,9 @@ public class MainActivity extends AppCompatActivity {
         hike.setDescription(description);
 
         db.updateHike(hike);
+        hikeArrayList.set(position, hike);
         hikeAdapter.notifyDataSetChanged();
+
     }
 
     private void deleteHike (Hike hike, int position) {

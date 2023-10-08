@@ -60,13 +60,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             cursor.moveToFirst();
         }
 
+        int parkingValue = cursor.getInt(cursor.getColumnIndexOrThrow(Hike.COLUMN_PARKING));
+        boolean isParkingAvailable = (parkingValue == 1);
+
         Hike hike = new Hike(
                 cursor.getString(cursor.getColumnIndexOrThrow(Hike.COLUMN_NAME)),
                 cursor.getString(cursor.getColumnIndexOrThrow(Hike.COLUMN_LOCATION)),
                 cursor.getString(cursor.getColumnIndexOrThrow(Hike.COLUMN_DATE)),
-                cursor.getString(cursor.getColumnIndexOrThrow(Hike.COLUMN_PARKING)),
+                isParkingAvailable,
                 cursor.getString(cursor.getColumnIndexOrThrow(Hike.COLUMN_LENGTH)),
-                cursor.getString(cursor.getColumnIndexOrThrow(Hike.COLUMN_DIFFICULTY)),
+                cursor.getInt(cursor.getColumnIndexOrThrow(Hike.COLUMN_DIFFICULTY)),
                 cursor.getString(cursor.getColumnIndexOrThrow(Hike.COLUMN_DESCRIPTION)),
                 cursor.getInt(cursor.getColumnIndexOrThrow(Hike.COLUMN_ID))
         );
@@ -85,15 +88,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(selectQuery, null);
 
         if (cursor.moveToFirst()){
+            int parkingValue = cursor.getInt(cursor.getColumnIndexOrThrow(Hike.COLUMN_PARKING));
+            boolean isParkingAvailable = (parkingValue == 1);
             do {
                 Hike hike = new Hike();
                 hike.setId(cursor.getInt(cursor.getColumnIndexOrThrow(Hike.COLUMN_ID)));
                 hike.setName(cursor.getString(cursor.getColumnIndexOrThrow(Hike.COLUMN_NAME)));
                 hike.setLocation(cursor.getString(cursor.getColumnIndexOrThrow(Hike.COLUMN_LOCATION)));
                 hike.setDate(cursor.getString(cursor.getColumnIndexOrThrow(Hike.COLUMN_DATE)));
-                hike.setParking(cursor.getString(cursor.getColumnIndexOrThrow(Hike.COLUMN_PARKING)));
+                hike.setParking(isParkingAvailable);
                 hike.setLength(cursor.getString(cursor.getColumnIndexOrThrow(Hike.COLUMN_LENGTH)));
-                hike.setDifficulty(cursor.getString(cursor.getColumnIndexOrThrow(Hike.COLUMN_DIFFICULTY)));
+                hike.setDifficulty(cursor.getInt(cursor.getColumnIndexOrThrow(Hike.COLUMN_DIFFICULTY)));
                 hike.setDescription(cursor.getString(cursor.getColumnIndexOrThrow(Hike.COLUMN_DESCRIPTION)));
                 hikes.add(hike);
             } while (cursor.moveToNext());
@@ -104,7 +109,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // insert Hike
-    public long insertHike(String name, String location, String date, String parking, String length, String difficulty, String description){
+    public long insertHike(String name, String location, String date, Boolean parking, String length, int difficulty, String description){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
@@ -143,6 +148,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void deleteHike(Hike hike){
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(Hike.TABLE_NAME, Hike.COLUMN_ID + "=?", new String[]{String.valueOf(hike.getId())});
+        db.close();
+    }
+
+    public void deleteAllHikes(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DELETE FROM " + Hike.TABLE_NAME);
         db.close();
     }
 }

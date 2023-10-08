@@ -1,5 +1,7 @@
 package com.example.myapplication.db.entity;
 
+import android.util.Log;
+
 public class Hike {
 //    Name of hike (e.g. "Snowdon•, "Trosley Country park", etc.) — Required field
 //            Location - Required field
@@ -22,9 +24,9 @@ public class Hike {
     private String name;
     private String location;
     private String date;
-    private String parking;
+    private Boolean parking;
     private String length;
-    private String difficulty;
+    private int difficulty;
     private String description;
     private int id;
 
@@ -32,7 +34,7 @@ public class Hike {
 
     }
 
-    public Hike(String name, String location, String date, String parking, String length, String difficulty, String description, int id){
+    public Hike(String name, String location, String date, Boolean parking, String length, int difficulty, String description, int id){
         this.name = name;
         this.location = location;
         this.date = date;
@@ -67,11 +69,11 @@ public class Hike {
         this.date = date;
     }
 
-     public String getParking() {
+     public Boolean getParking() {
         return parking;
     }
 
-    public void setParking(String parking) {
+    public void setParking(Boolean parking) {
         this.parking = parking;
     }
 
@@ -83,11 +85,11 @@ public class Hike {
         this.length = length;
     }
 
-     public String getDifficulty() {
+     public int getDifficulty() {
         return difficulty;
     }
 
-    public void setDifficulty(String difficulty) {
+    public void setDifficulty(int difficulty) {
         this.difficulty = difficulty;
     }
 

@@ -1,128 +1,143 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="10dp"
-    >
-            <TextView
-                android:id="@+id/popupTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:text="Add a new hike"
-                android:textColor="#000000"
-                android:textSize="24sp" />
-            <EditText
-                android:id="@+id/popupHikeName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:ems="10"
-                android:hint="Hike name"
-                android:inputType="textPersonName"
-                android:textColor="#000000"
-                android:textColorHint="#000000"
-                android:textSize="24sp" />
-            <EditText
-                android:id="@+id/popupHikeLocation"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:ems="10"
-                android:hint="Hike location"
-                android:inputType="textPersonName"
-                android:textColor="#000000"
-                android:textColorHint="#000000"
-                android:textSize="24sp" />
-<!--            date picker for hike date-->
-            <EditText
-                android:id="@+id/popupHikeDate"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:ems="10"
-                android:hint="Hike date"
-                android:inputType="textPersonName"
-                android:textColor="#000000"
-                android:textColorHint="#000000"
-                android:textSize="24sp" />
-            <CheckBox
-                android:id="@+id/popupParkingAvailable"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:text="Parking available?"
-                android:textColor="#000000"
-                android:textSize="24sp" />
-            <EditText
-                android:id="@+id/popupHikeLength"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:ems="10"
-                android:hint="Hike length"
-                android:inputType="textPersonName"
-                android:textColor="#000000"
-                android:textColorHint="#000000"
-                android:textSize="24sp" />
-<!--            level of difficulty-->
-            <RadioGroup
-                android:id="@+id/popupHikeDifficulty"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:orientation="horizontal"
-                android:textColor="#000000"
-                android:textSize="24sp">
+    android:padding="10dp">
 
-                <RadioButton
-                    android:id="@+id/popupHikeDifficultyEasy"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Easy" />
-                <RadioButton
-                    android:id="@+id/popupHikeDifficultyMedium"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Medium" />
+    <TextView
+        android:id="@+id/popupTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="Add a new hike"
+        android:textColor="#000000"
+        android:textSize="24sp" />
 
-                <RadioButton
-                    android:id="@+id/popupHikeDifficultyHard"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Hard" />
-            </RadioGroup>
-            <EditText
-                android:id="@+id/popupHikeDescription"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:ems="10"
-                android:hint="Hike description"
-                android:inputType="textPersonName"
-                android:textColor="#000000"
-                android:textColorHint="#000000"
-                android:textSize="24sp" />
+    <EditText
+        android:id="@+id/popupHikeName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:ems="10"
+        android:hint="Hike name"
+        android:inputType="textPersonName"
+        android:textColor="#000000"
+        android:textColorHint="#000000"
+        android:textSize="24sp" />
+
+    <EditText
+        android:id="@+id/popupHikeLocation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:ems="10"
+        android:hint="Hike location"
+        android:inputType="textPersonName"
+        android:textColor="#000000"
+        android:textColorHint="#000000"
+        android:textSize="24sp" />
+
+
+    <TextView
+        android:id="@+id/popupHikeDateLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="Hike date (DD/MM/YYYY)"
+        android:textColor="#000000"
+        android:textSize="24sp" />
+    <Button
+        android:id="@+id/popupHikeDateButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@color/purple_500"
+        android:text="Pick a date"
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp" />
+
+    <CheckBox
+        android:id="@+id/popupParkingAvailable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="Parking available?"
+        android:textColor="#000000"
+        android:textSize="24sp" />
+
+    <EditText
+        android:id="@+id/popupHikeLength"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:ems="10"
+        android:hint="Hike length"
+        android:inputType="textPersonName"
+        android:textColor="#000000"
+        android:textColorHint="#000000"
+        android:textSize="24sp" />
+    <!--            level of difficulty-->
+    <RadioGroup
+        android:id="@+id/popupHikeDifficulty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:orientation="horizontal"
+        android:textColor="#000000"
+        android:textSize="24sp">
+
+        <RadioButton
+            android:id="@+id/popupHikeDifficultyEasy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Easy" />
+
+        <RadioButton
+            android:id="@+id/popupHikeDifficultyMedium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Medium" />
+
+        <RadioButton
+            android:id="@+id/popupHikeDifficultyHard"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Hard" />
+    </RadioGroup>
+
+    <EditText
+        android:id="@+id/popupHikeDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:ems="10"
+        android:hint="Hike description"
+        android:inputType="textPersonName"
+        android:textColor="#000000"
+        android:textColorHint="#000000"
+        android:textSize="24sp" />
 </LinearLayout>
