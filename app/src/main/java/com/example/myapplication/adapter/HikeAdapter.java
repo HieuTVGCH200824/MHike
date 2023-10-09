@@ -2,6 +2,8 @@ package com.example.myapplication.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.MainActivity;
+import com.example.myapplication.ObservationActivity;
 import com.example.myapplication.R;
 import com.example.myapplication.db.entity.Hike;
 
@@ -72,7 +75,13 @@ public class HikeAdapter extends RecyclerView.Adapter<HikeAdapter.HikeViewHolder
             @Override
             public void onClick(View view) {
                 //go to detail hike's detail view
-
+                Intent intent = new Intent(context, ObservationActivity.class);
+                intent.putExtra("hikeId", hike.getId());
+                Log.d(
+                        "Hike ID",
+                        String.valueOf(hike.getId())
+                );
+                context.startActivity(intent);
             }
         });
 

@@ -34,7 +34,7 @@
 
     <include
         android:id="@+id/include"
-        layout="@layout/content_main"
+        layout="@layout/hike_main"
         android:layout_width="408dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"

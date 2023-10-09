@@ -28,13 +28,13 @@ public class Hike {
     private String length;
     private int difficulty;
     private String description;
-    private int id;
+    private long id;
 
-    public Hike(){
+    public Hike() {
 
     }
 
-    public Hike(String name, String location, String date, Boolean parking, String length, int difficulty, String description, int id){
+    public Hike(String name, String location, String date, Boolean parking, String length, int difficulty, String description, long id) {
         this.name = name;
         this.location = location;
         this.date = date;
@@ -53,7 +53,7 @@ public class Hike {
         this.name = name;
     }
 
-     public String getLocation() {
+    public String getLocation() {
         return location;
     }
 
@@ -61,7 +61,7 @@ public class Hike {
         this.location = location;
     }
 
-     public String getDate() {
+    public String getDate() {
         return date;
     }
 
@@ -69,7 +69,7 @@ public class Hike {
         this.date = date;
     }
 
-     public Boolean getParking() {
+    public Boolean getParking() {
         return parking;
     }
 
@@ -77,7 +77,7 @@ public class Hike {
         this.parking = parking;
     }
 
-     public String getLength() {
+    public String getLength() {
         return length;
     }
 
@@ -85,7 +85,7 @@ public class Hike {
         this.length = length;
     }
 
-     public int getDifficulty() {
+    public int getDifficulty() {
         return difficulty;
     }
 
@@ -93,7 +93,7 @@ public class Hike {
         this.difficulty = difficulty;
     }
 
-     public String getDescription() {
+    public String getDescription() {
         return description;
     }
 
@@ -101,7 +101,7 @@ public class Hike {
         this.description = description;
     }
 
-     public int getId() {
+    public long getId() {
         return id;
     }
 
