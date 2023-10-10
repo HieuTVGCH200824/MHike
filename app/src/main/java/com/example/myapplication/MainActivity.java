@@ -3,6 +3,7 @@ package com.example.myapplication;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -48,6 +49,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("Mhike");
+
 
         //render hike list
         RecyclerView hikeList = findViewById(R.id.recycler_view_hikes);
@@ -182,16 +188,13 @@ public class MainActivity extends AppCompatActivity {
     private void showDatePickerDialog(Button hikeDateButton) {
         final Calendar c = Calendar.getInstance();
 
-        // on below line we are getting
-        // our day, month and year.
+
         int year = c.get(Calendar.YEAR);
         int month = c.get(Calendar.MONTH);
         int day = c.get(Calendar.DAY_OF_MONTH);
 
 
-        // on below line we are creating a variable for date picker dialog.
         DatePickerDialog datePickerDialog = new DatePickerDialog(
-                // on below line we are passing context.
                 MainActivity.this,
                 new DatePickerDialog.OnDateSetListener() {
                     @Override
@@ -201,11 +204,9 @@ public class MainActivity extends AppCompatActivity {
 
                     }
                 },
-                // on below line we are passing year,
-                // month and day for selected date in our date picker.
+
                 year, month, day);
-        // at last we are calling show to
-        // display our date picker dialog.
+
         datePickerDialog.show();
     }
 
@@ -243,7 +244,6 @@ public class MainActivity extends AppCompatActivity {
             hikeDescription.setText(hike.getDescription());
 
             int difficulty = hike.getDifficulty();
-            Log.d("difficulty", String.valueOf(difficulty));
             if (difficulty != 1) {
                 RadioButton radioButton = popupView.findViewById(difficulty);
                 radioButton.setChecked(true);
