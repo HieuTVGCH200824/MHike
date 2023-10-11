@@ -20,7 +20,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             super(context, DATABASE_NAME, null, DATABASE_VERSION);
         }
 
-
+    @Override
+    public void onOpen(SQLiteDatabase db) {
+        super.onOpen(db);
+        if (!db.isReadOnly()) {
+            // Enable foreign key constraints
+            db.execSQL("PRAGMA foreign_keys=ON;");
+        }
+    }
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL(Hike.CREATE_TABLE);

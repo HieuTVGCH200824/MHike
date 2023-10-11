@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 
@@ -8,10 +9,16 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -24,6 +31,7 @@ import android.widget.DatePicker;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.myapplication.adapter.ObservationAdapter;
@@ -65,8 +73,6 @@ public class ObservationActivity extends AppCompatActivity {
         TextView hikeDescription = findViewById(R.id.hikeDescription);
 
 
-
-
         // Retrieve data passed from the source activity
         Intent intent = getIntent();
         if (intent != null) {
@@ -76,9 +82,9 @@ public class ObservationActivity extends AppCompatActivity {
             db = new DatabaseHelper(this);
             Hike hike = db.getHike(hikeId);
 
-            observationArrayList= db.getAllObservationsByHikeId(hikeId);
+            observationArrayList = db.getAllObservationsByHikeId(hikeId);
 
-            observationAdapter = new ObservationAdapter(this, observationArrayList,this);
+            observationAdapter = new ObservationAdapter(this, observationArrayList, this);
             obsList.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
             obsList.setItemAnimator(new DefaultItemAnimator());
             obsList.setAdapter(observationAdapter);
@@ -87,7 +93,7 @@ public class ObservationActivity extends AppCompatActivity {
             addNewObs.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    addAndEditObservation(false, null, -1,hikeId);
+                    addAndEditObservation(false, null, -1, hikeId);
                 }
             });
 
@@ -97,9 +103,6 @@ public class ObservationActivity extends AppCompatActivity {
             RadioButton selectedDifficulty = popupView.findViewById(hike.getDifficulty());
             String selectedRadioButtonText = selectedDifficulty.getText().toString();
 
-
-            //render hike's details
-
             hikeName.setText("Hike name: " + hike.getName());
             hikeLocation.setText("Hike location: " + hike.getLocation());
             hikeDate.setText("Hike date: " + hike.getDate());
@@ -107,10 +110,85 @@ public class ObservationActivity extends AppCompatActivity {
             hikeLength.setText("Hike length: " + hike.getLength());
             hikeDifficulty.setText("Hike difficulty: " + selectedRadioButtonText);
             hikeDescription.setText("\"" + hike.getDescription() + "\"");
+
+
+            //delete on swipe
+            ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+
+                @Override
+                public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                    return false;
+                }
+
+                @Override
+                public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+                    //Remove swiped item from list and notify the RecyclerView
+
+                    int position = viewHolder.getAdapterPosition();
+                    Observation observation = observationArrayList.get(position);
+                    deleteObservation(observation, position);
+                }
+
+                @Override
+                public void onChildDraw(
+                        @NonNull Canvas c,
+                        @NonNull RecyclerView recyclerView,
+                        @NonNull RecyclerView.ViewHolder viewHolder,
+                        float dX,
+                        float dY,
+                        int actionState,
+                        boolean isCurrentlyActive
+                ) {
+                    // Limit the swipe range to the width of the trash can icon (100 pixels)
+                    float yourMaxSwipeRange = 200f; // Adjust this to match the width of your icon
+
+                    if (Math.abs(dX) > yourMaxSwipeRange) {
+                        dX = Math.signum(dX) * yourMaxSwipeRange;
+                    }
+
+                    View itemView = viewHolder.itemView;
+                    Paint paint = new Paint();
+
+                    if (dX > 0) {
+                        paint.setColor(Color.parseColor("#f43f5e"));
+                        c.drawRect(itemView.getLeft(), itemView.getTop(), dX, itemView.getBottom(), paint);
+                    } else {
+                        paint.setColor(Color.parseColor("#f43f5e"));
+                        c.drawRect(itemView.getRight() + dX, itemView.getTop(), itemView.getRight(), itemView.getBottom(), paint);
+                    }
+
+                    // Draw the trash can icon
+                    Drawable icon = ContextCompat.getDrawable(ObservationActivity.this, R.drawable.ic_delete);
+                    int iconMargin = (itemView.getHeight() - icon.getIntrinsicHeight()) / 2;
+                    int iconLeft, iconTop, iconRight, iconBottom;
+
+                    if (dX > 0) {
+                        iconLeft = itemView.getLeft() + iconMargin;
+                        iconTop = itemView.getTop() + (itemView.getHeight() - icon.getIntrinsicHeight()) / 2;
+                    } else {
+                        iconLeft = itemView.getRight() - iconMargin - icon.getIntrinsicWidth();
+                        iconTop = itemView.getTop() + (itemView.getHeight() - icon.getIntrinsicHeight()) / 2;
+                    }
+
+                    iconRight = iconLeft + icon.getIntrinsicWidth();
+                    iconBottom = iconTop + icon.getIntrinsicHeight();
+
+                    icon.setBounds(iconLeft, iconTop, iconRight, iconBottom);
+                    icon.draw(c);
+
+                    super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+                }
+
+
+            };
+
+            ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
+            itemTouchHelper.attachToRecyclerView(obsList);
+
         }
     }
 
-    public void addAndEditObservation(final boolean isUpdated, final Observation obs, final int position,final long hikeId) {
+    public void addAndEditObservation(final boolean isUpdated, final Observation obs, final int position, final long hikeId) {
         LayoutInflater layoutInflater = LayoutInflater.from(getApplicationContext());
         View popupView = layoutInflater.inflate(R.layout.obs_popup_layout, null);
         //AlertDialog.builder
@@ -122,10 +200,19 @@ public class ObservationActivity extends AppCompatActivity {
         final Button obsTime = popupView.findViewById(R.id.popupObsTime);
         final TextView obsComment = popupView.findViewById(R.id.popupObsComment);
 
+        if(!isUpdated && obsTime.getText().toString().isEmpty()){
+        //set current time to default (HH:MM) format
+        Calendar calendar = Calendar.getInstance();
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int minute = calendar.get(Calendar.MINUTE);
+        String time = hour + ":" + minute;
+        obsTime.setText(time);
+        }
+
         obsTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showDatePickerDialog(obsTime);
+                showTimePickerDialog(obsTime);
             }
         });
 
@@ -151,7 +238,7 @@ public class ObservationActivity extends AppCompatActivity {
                         if (obsName.getText().toString().isEmpty()) {
                             Toast.makeText(ObservationActivity.this, "Hike's name invalid", Toast.LENGTH_SHORT).show();
                             return;
-                        } else if (obsTime.getText().toString().isEmpty()) {
+                        } else if (obsTime.getText().toString().isEmpty()|| obsTime.getText().toString().equals("Pick a time")) {
                             Toast.makeText(ObservationActivity.this, "Hike's location invalid", Toast.LENGTH_SHORT).show();
                             return;
                         } else if (obsComment.getText().toString().isEmpty()) {
@@ -159,7 +246,7 @@ public class ObservationActivity extends AppCompatActivity {
                             return;
                         }
 
-                        if(isUpdated && obs != null){
+                        if (isUpdated && obs != null) {
                             updateObservation(obsName.getText().toString(), obsTime.getText().toString(), obsComment.getText().toString(), position);
                         } else {
                             createObservation(obsName.getText().toString(), obsTime.getText().toString(), obsComment.getText().toString(), hikeId);
@@ -178,8 +265,8 @@ public class ObservationActivity extends AppCompatActivity {
         alertDialog.setCanceledOnTouchOutside(true);
     }
 
-    private void createObservation(String name, String time, String comment,long hikeId) {
-        long id = db.insertObservation(name, time, comment,hikeId);
+    private void createObservation(String name, String time, String comment, long hikeId) {
+        long id = db.insertObservation(name, time, comment, hikeId);
         Observation obs = db.getObservation(id);
 
         if (obs != null) {
@@ -199,29 +286,47 @@ public class ObservationActivity extends AppCompatActivity {
         observationAdapter.notifyDataSetChanged();
     }
 
-    private void showDatePickerDialog(Button obsTime) {
-        final Calendar c = Calendar.getInstance();
+    private void deleteObservation(Observation obs, int position){
+        //create confirmation dialog
+        AlertDialog.Builder builder = new AlertDialog.Builder(ObservationActivity.this);
+        builder.setTitle("Delete Observation");
+        builder.setMessage("Are you sure you want to delete this observation?");
+        builder.setCancelable(true);
+        //delete on confirm
+        builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int i) {
+                db.deleteObservation(obs);
+                observationArrayList.remove(position);
+                observationAdapter.notifyDataSetChanged();
+                dialog.dismiss();
+            }
+        });
+        //cancel delete
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int i) {
+                observationAdapter.notifyDataSetChanged();
+                dialog.dismiss();
+            }
+        });
 
-        // on below line we are getting
-        // our day, month and year.
-        int year = c.get(Calendar.YEAR);
-        int month = c.get(Calendar.MONTH);
-        int day = c.get(Calendar.DAY_OF_MONTH);
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
 
+    private void showTimePickerDialog(Button obsTime) {
+        final Calendar calendar = Calendar.getInstance();
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int minute = calendar.get(Calendar.MINUTE);
 
-        // on below line we are creating a variable for date picker dialog.
-        DatePickerDialog datePickerDialog = new DatePickerDialog(
-                // on below line we are passing context.
-                ObservationActivity.this,
-                new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year,
-                                          int monthOfYear, int dayOfMonth) {
-                        obsTime.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
-                    }
-                },
-                year, month, day);
-        datePickerDialog.show();
+        TimePickerDialog timePickerDialog = new TimePickerDialog(ObservationActivity.this, new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker timePicker, int hour, int minute) {
+                obsTime.setText(hour + ":" + minute);
+            }
+        }, hour, minute, true);
+        timePickerDialog.show();
     }
 
     @Override

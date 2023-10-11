@@ -31,15 +31,24 @@
         android:textColor="#000000"
         android:textColorHint="#000000"
         android:textSize="24sp" />
-    <Button
-        android:id="@+id/popupObsTime"
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
+        android:text="Pick observation time (HH:MM)"
+        android:textColor="#000000"
+        android:textSize="24sp" />
+    <Button
+        android:id="@+id/popupObsTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
         android:background="@color/purple_500"
-        android:text="Pick a date"
+        android:text=""
         android:textAllCaps="false"
         android:textColor="#FFFFFF"
         android:textSize="24sp" />

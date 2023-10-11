@@ -64,7 +64,6 @@
             android:text="Hike date (DD/MM/YYYY)"
             android:textColor="#000000"
             android:textSize="24sp" />
-
         <Button
             android:id="@+id/popupHikeDateButton"
             android:layout_width="match_parent"

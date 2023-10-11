@@ -3,6 +3,8 @@ package com.example.myapplication.db.entity;
 public class Observation {
 
     public static final String TABLE_NAME ="observations";
+    public static final String TABLE_NAME_HIKES = "hikes";
+
     public static final String COLUMN_ID = "observation_id";
     public static final String COLUMN_NAME = "observation_name";
     public static final String COLUMN_TIME = "observation_time";
@@ -77,7 +79,7 @@ public class Observation {
                     + COLUMN_TIME + " TEXT,"
                     + COLUMN_COMMENT + " TEXT,"
                     + COLUMN_HIKE_ID + " INTEGER,"
-                    + "FOREIGN KEY(" + COLUMN_HIKE_ID + ") REFERENCES hikes(hike_id)"
-                    + ")";
+                    + "FOREIGN KEY (" + COLUMN_HIKE_ID + ") REFERENCES " + TABLE_NAME_HIKES + " (hike_id) ON DELETE CASCADE" +
+                    ")";
 
 }
