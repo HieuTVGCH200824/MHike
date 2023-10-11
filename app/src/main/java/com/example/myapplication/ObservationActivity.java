@@ -267,9 +267,6 @@ public class ObservationActivity extends AppCompatActivity {
                         } else if (obsTime.getText().toString().isEmpty()|| obsTime.getText().toString().equals("Pick a time")) {
                             Toast.makeText(ObservationActivity.this, "Hike's location invalid", Toast.LENGTH_SHORT).show();
                             return;
-                        } else if (obsComment.getText().toString().isEmpty()) {
-                            Toast.makeText(ObservationActivity.this, "Hike's date invalid", Toast.LENGTH_SHORT).show();
-                            return;
                         }
 
                         if (isUpdated && obs != null) {
