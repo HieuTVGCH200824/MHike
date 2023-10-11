@@ -5,6 +5,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -26,11 +27,13 @@ public class ObservationAdapter extends RecyclerView.Adapter<ObservationAdapter.
     public class ObservationViewHolder extends RecyclerView.ViewHolder {
         public TextView name;
         public TextView time;
+        public ImageButton editButton;
 
         public ObservationViewHolder(@NonNull View itemView) {
             super(itemView);
             this.name = itemView.findViewById(R.id.name);
             this.time = itemView.findViewById(R.id.time);
+            this.editButton = itemView.findViewById(R.id.editButton);
         }
     }
 
@@ -56,7 +59,24 @@ public class ObservationAdapter extends RecyclerView.Adapter<ObservationAdapter.
         final Observation observation = observationsList.get(positions);
         holder.name.setText(observation.getName());
         holder.time.setText(observation.getTime());
+
+        holder.editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                observationActivity.addAndEditObservation(true, observation, positions, observation.getHikeId());
+            }
+        });
+
+        //open popup on click
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                observationActivity.openObsDetail(observation);
+            }
+        });
     }
+
+
 
     //  Get number of items in list
     @Override

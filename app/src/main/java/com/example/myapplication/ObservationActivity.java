@@ -188,6 +188,32 @@ public class ObservationActivity extends AppCompatActivity {
         }
     }
 
+    public void openObsDetail(Observation observation){
+        LayoutInflater layoutInflater = LayoutInflater.from(getApplicationContext());
+        View popupView = layoutInflater.inflate(R.layout.obs_detail_popup, null);
+        //AlertDialog.builder
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ObservationActivity.this);
+        alertDialogBuilder.setView(popupView);
+
+        final TextView obsName = popupView.findViewById(R.id.popupObsName);
+        final TextView obsTime = popupView.findViewById(R.id.popupObsTime);
+        final TextView obsComment = popupView.findViewById(R.id.popupObsComment);
+
+        obsName.setText("Name: "+observation.getName());
+        obsTime.setText("Time: "+observation.getTime());
+        obsComment.setText("\""+observation.getComment()+ "\"");
+
+        alertDialogBuilder.setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.cancel();
+            }
+        });
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
+
     public void addAndEditObservation(final boolean isUpdated, final Observation obs, final int position, final long hikeId) {
         LayoutInflater layoutInflater = LayoutInflater.from(getApplicationContext());
         View popupView = layoutInflater.inflate(R.layout.obs_popup_layout, null);
