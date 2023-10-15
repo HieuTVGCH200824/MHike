@@ -114,6 +114,10 @@ public class HikeAdapter extends RecyclerView.Adapter<HikeAdapter.HikeViewHolder
         notifyDataSetChanged();
     }
 
+    public ArrayList<Hike> getCurrentList(){
+        return hikesList;
+    }
+
 //  Get number of items in list
     @Override
     public int getItemCount() {

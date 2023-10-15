@@ -197,6 +197,7 @@ public class MainActivity extends AppCompatActivity {
         searchView.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
+                hikeArrayList = hikeAdapter.getCurrentList();
                 hikeAdapter.filterList(hikeArrayList);
                 return false;
             }
@@ -240,6 +241,8 @@ public class MainActivity extends AppCompatActivity {
 
 
         if(text.length() == 0){
+           //refesh list
+            hikeArrayList = hikeAdapter.getCurrentList();
             hikeAdapter.filterList(hikeArrayList);
         }else{
         hikeAdapter.filterList(filteredList);
