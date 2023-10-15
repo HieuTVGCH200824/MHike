@@ -3,6 +3,7 @@ package com.example.myapplication;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -10,6 +11,8 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
+import android.view.Menu;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.graphics.Canvas;
@@ -18,8 +21,9 @@ import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -79,6 +83,8 @@ public class MainActivity extends AppCompatActivity {
 
                 int position = viewHolder.getAdapterPosition();
                 Hike hike = hikeArrayList.get(position);
+                Log.d("Hike", "onSwiped: " + hike.getName());
+                Log.d("position", "onSwiped: " + position);
                 deleteHike(hike, position);
             }
 
@@ -175,14 +181,61 @@ public class MainActivity extends AppCompatActivity {
                 addAndEditHike(false, null, -1);
             }
         });
+    }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
 
+        MenuInflater inflater = getMenuInflater();
+
+        inflater.inflate(R.menu.search_menu, menu);
+
+        MenuItem searchItem = menu.findItem(R.id.actionSearch);
+
+        SearchView searchView = (SearchView) searchItem.getActionView();
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                //hide add button when searching
+                filter(newText);
+                return false;
+            }
+        });
+
+        //reshow button when exit search
+        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                addNewHike.setVisibility(View.VISIBLE);
+                return false;
+            }
+        });
+        return true;
+    }
+
+    //filter hike list
+    private void filter(String text) {
+        ArrayList<Hike> filteredList = new ArrayList<>();
+
+        for (Hike hike : hikeArrayList) {
+            if (hike.getName().toLowerCase().contains(text.toLowerCase())) {
+                filteredList.add(hike);
+            }
+        }
+
+        hikeAdapter.filterList(filteredList);
     }
 
     public void deleteAllHikes(View view) {
         db.deleteAllHikes();
         hikeArrayList.clear();
-        hikeAdapter.notifyDataSetChanged();
+        hikeAdapter.deleteAllHikes();
     }
 
     private void showDatePickerDialog(Button hikeDateButton) {
@@ -201,7 +254,6 @@ public class MainActivity extends AppCompatActivity {
                     public void onDateSet(DatePicker view, int year,
                                           int monthOfYear, int dayOfMonth) {
                         hikeDateButton.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
-
                     }
                 },
 
@@ -302,7 +354,8 @@ public class MainActivity extends AppCompatActivity {
         Hike hike = db.getHike(id);
         if (hike != null) {
             hikeArrayList.add(0, hike);
-            hikeAdapter.notifyDataSetChanged();
+            hikeAdapter.createHike(hike);
+            Log.d("HikeArrayList:" , String.valueOf(hikeArrayList.size()));
         }
     }
 
@@ -318,7 +371,7 @@ public class MainActivity extends AppCompatActivity {
 
         db.updateHike(hike);
         hikeArrayList.set(position, hike);
-        hikeAdapter.notifyDataSetChanged();
+        hikeAdapter.updateHike(hike, position);
 
     }
 
@@ -334,7 +387,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int i) {
                 db.deleteHike(hike);
                 hikeArrayList.remove(position);
-                hikeAdapter.notifyDataSetChanged();
+                hikeAdapter.deleteHike(position);
                 dialog.dismiss();
             }
         });

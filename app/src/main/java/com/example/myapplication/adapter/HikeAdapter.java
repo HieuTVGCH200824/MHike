@@ -84,7 +84,34 @@ public class HikeAdapter extends RecyclerView.Adapter<HikeAdapter.HikeViewHolder
                 context.startActivity(intent);
             }
         });
+    }
 
+    public void filterList(ArrayList<Hike> filteredList) {
+        hikesList = filteredList;
+        notifyDataSetChanged();
+    }
+
+    //create Hike
+    public void createHike(Hike hike){
+        hikesList.add(0,hike);
+        notifyDataSetChanged();
+    }
+
+//update Hike
+    public void updateHike(Hike hike, int position){
+        hikesList.set(position,hike);
+        notifyDataSetChanged();
+    }
+
+//  Delete Hike
+    public void deleteHike(int position){
+        hikesList.remove(position);
+        notifyDataSetChanged();
+    }
+
+    public void deleteAllHikes(){
+        hikesList.clear();
+        notifyDataSetChanged();
     }
 
 //  Get number of items in list
