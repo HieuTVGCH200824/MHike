@@ -293,8 +293,7 @@ public class ObservationActivity extends AppCompatActivity {
         Observation obs = db.getObservation(id);
 
         if (obs != null) {
-            observationArrayList.add(0, obs);
-            observationAdapter.notifyDataSetChanged();
+            observationAdapter.createNewObservation(obs);
         }
     }
 
@@ -305,8 +304,7 @@ public class ObservationActivity extends AppCompatActivity {
         obs.setComment(comment);
 
         db.updateObservation(obs);
-        observationArrayList.set(position, obs);
-        observationAdapter.notifyDataSetChanged();
+        observationAdapter.updateObservation(obs, position);
     }
 
     private void deleteObservation(Observation obs, int position){
@@ -320,8 +318,7 @@ public class ObservationActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int i) {
                 db.deleteObservation(obs);
-                observationArrayList.remove(position);
-                observationAdapter.notifyDataSetChanged();
+                observationAdapter.deleteObservation(position);
                 dialog.dismiss();
             }
         });

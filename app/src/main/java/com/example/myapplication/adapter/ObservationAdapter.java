@@ -76,6 +76,24 @@ public class ObservationAdapter extends RecyclerView.Adapter<ObservationAdapter.
         });
     }
 
+    //create new observation
+    public void createNewObservation(Observation observation) {
+        observationsList.add(observation);
+        notifyDataSetChanged();
+    }
+
+    //update observation
+    public void updateObservation(Observation observation, int position) {
+        observationsList.set(position, observation);
+        notifyDataSetChanged();
+    }
+
+    //delete observation
+    public void deleteObservation(int position) {
+        observationsList.remove(position);
+        notifyDataSetChanged();
+    }
+
 
 
     //  Get number of items in list

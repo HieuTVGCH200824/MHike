@@ -194,6 +194,14 @@ public class MainActivity extends AppCompatActivity {
 
         SearchView searchView = (SearchView) searchItem.getActionView();
 
+        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                hikeAdapter.filterList(hikeArrayList);
+                return false;
+            }
+        });
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -202,6 +210,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
+
                 //hide add button when searching
                 filter(newText);
                 return false;
@@ -229,7 +238,13 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+
+        if(text.length() == 0){
+            hikeAdapter.filterList(hikeArrayList);
+        }else{
         hikeAdapter.filterList(filteredList);
+        }
+
     }
 
     public void deleteAllHikes(View view) {
@@ -353,9 +368,8 @@ public class MainActivity extends AppCompatActivity {
         long id = db.insertHike(name, location, date, parking, length, difficulty, description);
         Hike hike = db.getHike(id);
         if (hike != null) {
-            hikeArrayList.add(0, hike);
             hikeAdapter.createHike(hike);
-            Log.d("HikeArrayList:" , String.valueOf(hikeArrayList.size()));
+            Log.d("HikeArrayList:", String.valueOf(hikeArrayList.size()));
         }
     }
 
@@ -370,7 +384,6 @@ public class MainActivity extends AppCompatActivity {
         hike.setDescription(description);
 
         db.updateHike(hike);
-        hikeArrayList.set(position, hike);
         hikeAdapter.updateHike(hike, position);
 
     }
@@ -386,7 +399,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int i) {
                 db.deleteHike(hike);
-                hikeArrayList.remove(position);
                 hikeAdapter.deleteHike(position);
                 dialog.dismiss();
             }
