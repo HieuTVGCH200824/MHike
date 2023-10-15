@@ -197,7 +197,8 @@ public class MainActivity extends AppCompatActivity {
         searchView.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
-                hikeArrayList = hikeAdapter.getCurrentList();
+                hikeArrayList.clear();
+                hikeArrayList.addAll(db.getAllHikes());
                 hikeAdapter.filterList(hikeArrayList);
                 return false;
             }
@@ -242,7 +243,8 @@ public class MainActivity extends AppCompatActivity {
 
         if(text.length() == 0){
            //refesh list
-            hikeArrayList = hikeAdapter.getCurrentList();
+            hikeArrayList.clear();
+            hikeArrayList.addAll(db.getAllHikes());
             hikeAdapter.filterList(hikeArrayList);
         }else{
         hikeAdapter.filterList(filteredList);
@@ -372,7 +374,6 @@ public class MainActivity extends AppCompatActivity {
         Hike hike = db.getHike(id);
         if (hike != null) {
             hikeAdapter.createHike(hike);
-            Log.d("HikeArrayList:", String.valueOf(hikeArrayList.size()));
         }
     }
 
